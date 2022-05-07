@@ -1,21 +1,21 @@
 #pragma once
 
-#include "observer.hpp"
-
 #include <vector>
 #include <algorithm>
 #include <string>
 
+template <typename>
+struct Observer;
+
+template <typename T>
 struct Observable
 {
-    virtual ~Observable() = default;
-
-    virtual void subsribe(Observer & ob)
+    virtual void subsribe(Observer<T> & ob)
     {
         observers.push_back(&ob);
     }
 
-    virtual void unsubscribe(Observer & ob)
+    virtual void unsubscribe(Observer<T> & ob)
     {
         observers.erase(
                 std::remove(observers.begin(), observers.end(), &ob),
@@ -23,12 +23,12 @@ struct Observable
                 );
     }
 
-    virtual void notify(std::string const & message)
+    virtual void notify(T & source, std::string const & field)
     {
         for(auto * ob: observers)
-            ob->update(message);
+            ob->field_changed(source, field);
     }
 
     private:
-        std::vector<Observer *> observers;
+        std::vector<Observer<T> *> observers;
 };

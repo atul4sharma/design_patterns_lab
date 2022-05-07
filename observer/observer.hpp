@@ -3,12 +3,9 @@
 #include <string>
 #include <iostream>
 
+template <typename T>
 struct Observer
 {
-    virtual ~Observer() = default;
+    virtual void field_changed(T& source, std::string const & field) = 0;
 
-    virtual void update(std::string const & message)
-    {
-        std::cout << message << "\n";
-    }
 };
